@@ -5,13 +5,16 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const configService = app.get(ConfigService);
-
   app.setGlobalPrefix('api');
 
-  const port = configService.get<number>('PORT') ?? 3000;
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
 
-  await app.listen(port);
+  const port = process.env.PORT || 3000;
+
+  await app.listen(port, '0.0.0.0');
 }
 
 bootstrap();
